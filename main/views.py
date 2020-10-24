@@ -64,7 +64,7 @@ def addLibrarian(request):
             if 'is_librarian' in request.POST :
                 is_librarian = True
             print(is_admin,is_librarian)
-            my_user = User.objects.create_user(username = username,password = password,first_name = first_name,last_name = last_name,is_staff = is_admin)
+            my_user = User.objects.create_user(username = username,email=email,password = password,first_name = first_name,last_name = last_name,is_staff = is_admin)
             my_user.save()
             my_user.type_user.is_admin = is_admin
             my_user.type_user.is_librarian = is_librarian
