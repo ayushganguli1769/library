@@ -1,6 +1,6 @@
 # Library Management System<br/>
 ## <a href = "http://ayushganguli.pythonanywhere.com/">Live URL</a>
- This project is current hosted on pythonanywhere
+ This project is currently hosted on pythonanywhere
 ## <a href = "https://drive.google.com/file/d/105JgcLOzbaZz0U5cUqHUa70U5xycprlV/view?usp=sharing">Demonstration Video</a>
 Video demonstrating the working and functionalities of the project.
 This project has been done as part of take home internship selection task.<br>
