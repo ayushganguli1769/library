@@ -8,7 +8,7 @@ This project has been done as part of take home internship selection task.<br>
 ## How to run this project?
 ```bash
   pip install virtualenv
-  virtualemv .
+  virtualenv .
   .\scripts\activate
   git clone "https://github.com/ayushganguli1769/library.git"
   cd library
