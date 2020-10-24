@@ -7,7 +7,7 @@ This project has been done as part of take home internship selection task.<br>
 ### <b>Tech Stacks Used:</b>Django,Python 3.8,HTML,CSS,javaScript,Ajax,Bootstrap, Postgre SQL(sqlite locally, postgres in live server)
 ## How to run this project?
 ```bash
-  pip virtualenv
+  pip install virtualenv
   virtualemv .
   .\scripts\activate
   git clone "https://github.com/ayushganguli1769/library.git"
