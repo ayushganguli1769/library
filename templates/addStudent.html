@@ -1,0 +1,27 @@
+{% extends 'librarian_base.html' %}
+{% block librarian_body %}
+<h1 class="text-center p-3"><span class="badge badge-danger">Student Addition Form</span> </h1>
+
+<div class="m-4 p-4">
+<form action="{% url 'main:addStudent' %}" class="was-validated" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <input type="text" class="form-control" id="name" placeholder="Enter Name of Student" name="student_name" required>
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control" id="designation" placeholder="Enter Phone Number" name="phone_no" required>
+      </div>
+    <button type="submit" class="btn btn-primary p-2 m-2" name="addStudent" >ADD STUDENT</button>
+  </form>
+  
+</div>
+<script>
+    function message()
+    {
+        {% if message%}
+        alert("{{message}}");
+        {% endif %}
+    }
+    window.onload = message();
+</script>
+{% endblock librarian_body %}

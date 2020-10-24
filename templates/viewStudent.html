@@ -1,0 +1,43 @@
+{% extends 'librarian_base.html' %}
+{% block librarian_body %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'table.css' %}">
+<center>
+    <form action="{% url 'main:viewStudent' %}" method="POST">
+        {% csrf_token %}
+    <div class="row mb-2">
+        <div class="col-lg-4 offset-md-4 mt-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="text_val" placeholder="Enter username or user id" /> 
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+</form>
+    <table class="table-fill  m-5 " >
+        <thead>
+        <tr>
+        <th class="text-left">Student</th>
+        <th class="text-left">Phone Number</th>
+        </tr>
+        </thead>
+        <tbody class="table-hover" id="myTableRow">
+            {% for student in all_student %}
+            <tr>
+                <td><a href="{% url 'main:student_profile' student_id=student.id %}" class="text-primary">{{student.name}}</a></td>
+                <td>{{student.phone_no}}</td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</center>
+<script>
+    function message()
+    {
+        {% if message %}
+        alert("{{message}}");
+        {% endif %}
+    }
+    window.onload = message();
+</script>
+{% endblock librarian_body %}

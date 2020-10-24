@@ -1,0 +1,64 @@
+{% extends "admin_base.html" %}
+
+{% block admin_body %}
+<h1 class="text-center p-3"><span class="badge badge-danger">User Addition Form</span> </h1>
+
+<div class="m-4 p-4">
+<form action="/addLibrarian/" class="was-validated" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <input type="text" class="form-control" id="uname" placeholder="Enter username" name="username" required>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="designation" placeholder="Enter Designation" name="designation" required>
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email" required>
+      </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="first_name" placeholder="Enter First Name" name="first_name" required>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="last_name" placeholder="Enter Last Name" name="last_name" required>
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required>
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" id="password1" placeholder="Confirm Password" name="password1" required>
+      </div>
+        <input  type="checkbox" id="inlineCheckbox1" value="option1" name="is_admin">
+        <label  for="inlineCheckbox1">Admin</label><br>
+        <input  type="checkbox" id="inlineCheckbox2" value="option2" name="is_librarian">
+        <label for="inlineCheckbox2">Librarian</label><br>
+    <button type="submit" class="btn btn-primary p-2 m-2" name="addUser" onclick="return validate()">ADD USER</button>
+  </form>
+  
+</div>
+<script>
+    function message()
+    {
+        {% if message%}
+        alert("{{message}}");
+        {% endif %}
+    }
+    window.onload = message();
+</script>
+<script>
+    function validate()
+    {
+        password = document.getElementById('password').value;
+        password1 = document.getElementById('password1').value;
+        if (password != password1)
+        {
+            alert("Passwords do Not match");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+</script>
+{% endblock admin_body %}
+    

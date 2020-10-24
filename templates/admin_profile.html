@@ -1,0 +1,41 @@
+{% extends "admin_base.html" %}
+
+{% block admin_body %}
+{% load static %}
+<link rel="stylesheet" href="{% static "table.css" %}">
+<center>
+<div class="bg-warning">
+<div class="col-md-6 col-lg-4 col-xl-4 col-sm-12">
+    <div class="card" >
+<img class="card-img-top img-fluid" src=" {% static 'profile.jpg' %} " alt="Card image">
+<div class="card-body">
+<h3 class="card-title"><span id="card_student_name" class="badge badge-pill badge-success">Username:{{curr_user.username}}</span></h3>
+<h3 class="card-title"><span id="card_student_name" class="badge badge-pill badge-success">Email:{{curr_user.email}}</span></h3>
+
+{% if curr_user.type_user %}
+<h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-success">Designation:{{curr_user.type_user.designation}}</span></h3>  
+{% endif %}  
+
+{% if curr_user.type_user.is_admin %}
+<h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-success">Is Admin:YES</span></h3>  
+{% else %}
+<h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-success">Is Admin:NO</span></h3>  
+{% endif %}
+{% if curr_user.type_user.is_librarian %}
+<h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-success">Is Librarian:YES</span></h3>  
+{% else %}
+<h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-success">Is Librarian:NO</span></h3>  
+{% endif %}
+    
+</div>
+</div>
+</center>
+</div>
+<div class="text-center pt-0 pl-4 pr-4  mr-4 mt-0 ml-4">
+    <div class="jumbotron">
+        <h1>{{curr_user.username}}</h1>
+        <p>{{curr_user.type_user.designation}} at XYZ Company</p>
+      </div>
+    </div>
+</div>
+{% endblock admin_body %}

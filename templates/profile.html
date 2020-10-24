@@ -1,0 +1,184 @@
+{% extends "librarian_base.html" %}
+
+{% block librarian_body %}
+{% load static %}
+<input type="hidden" id="hidden_user_id" value="{{profile_user.id}}">
+<link rel="stylesheet" href="{% static "table.css" %}">
+<center>
+<div class="bg-warning">
+<div class="col-md-6 col-lg-4 col-xl-4 col-sm-12">
+    <div class="card" >
+<img class="card-img-top img-fluid" src="{% if profile_user.image %}{{profile_user.image.url}} {% else %} {% static 'profile.jpg' %} {% endif %} " alt="Card image">
+<div class="card-body">
+<h3 class="card-title"><span id="card_student_name" class="badge badge-pill badge-success">{{profile_user.name}}</span></h4>
+<h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-success">{{profile_user.phone_no}}</span></h4>
+</div>
+</div>
+</center>
+</div>
+
+<div class="m-3 p-4 ">
+    <button data-toggle="collapse" class="m-2" data-target="#update"><h3><span class="badge badge-pill badge-primary">Update {{profile_user.name}}'s Detail <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M3.544 6.295A.5.5 0 0 1 4 6h8a.5.5 0 0 1 .374.832l-4 4.5a.5.5 0 0 1-.748 0l-4-4.5a.5.5 0 0 1-.082-.537z"/>
+        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+      </svg></span></h3></button> <br>
+    <div id="update" class="m-2 p-4 collapse" style="font-size: x-large;">
+        <form action="{% url 'main:student_profile' student_id=profile_user.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="student_name" class="col-3"><b> Student's Name: </b></label><input type="text" name="student_name" id="student_name" value="{{profile_user.name}}"> <br>
+            <label for="phone_no" class="col-3"><b>Student's Phone Number</b></label><input type="number" name="student_phone_no" id="phone_no" value="{{profile_user.phone_no}}"><br>
+            <input type="file" name="student_image">
+            <div class="ml-5 mt-2"> 
+                <button class="btn btn-round btn-danger " name="update"> <b>UPDATE</b> </button>
+            </div>
+        </form>
+    </div>
+    <button data-toggle="collapse" class= "m-2" data-target="#viewBookHistory"><h3><span class="badge badge-pill badge-primary">View {{profile_user.name}}'s Book Issuing History <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M3.544 6.295A.5.5 0 0 1 4 6h8a.5.5 0 0 1 .374.832l-4 4.5a.5.5 0 0 1-.748 0l-4-4.5a.5.5 0 0 1-.082-.537z"/>
+        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+      </svg></span></h3></button> <br>
+    <div id="viewBookHistory" class="m-2 p-4 collapse">
+        <h3 class="card-title"><span id="card_phone_no" class="badge badge-pill badge-danger">Issue {{profile_user.name}} Book</span></h3>
+        <center>
+        <div class="form-group col-md-3 pt-2 pb-1 ">
+            <input type="text" class="form-control col-12" id="book_id"  placeholder="Enter Book ID for issuing book or Select it" oninput="suggestBook()">
+            <span class="help-block bg-info">Here Enter ID of Book to be issued or Select them</span>
+            <div id="suggestion"></div>
+        </div> 
+        </center>
+        <label >Enter Date of Return</label> 
+        <div class="row">
+            <div class="form-group col-md-3 p-2">
+              <input type="text" class="form-control" id="year" value="2020" placeholder="Year">
+            </div> 
+            <div class="form-group col-md-2 p-2">
+              <input type="text" class="form-control" id="month" placeholder="Month">
+            </div> 
+            <div class="form-group col-md-2 p-2">
+              <input type="text" class="form-control" id="day" placeholder="Day">
+            </div> 
+            <div class="form-group col-md-2 p-2">
+              <input type="text" class="form-control" id="hour" placeholder="Hour">
+            </div> 
+            <div class="form-group col-md-2 p-2">
+              <input type="text" class="form-control" id="minute" placeholder="Minutes">
+            </div> 
+            <button class="btn btn-success col-md-3 mx-auto" onclick="issueBook()">ISSUE BOOK</button>
+            <!--<button class="btn btn-success col-md-3 mx-auto" onclick="returnBook()">RETURN BOOK</button>-->
+          </div>
+          <BR></BR>
+          <h3 class="card-title"><span class="badge badge-pill badge-danger">{{profile_user.name}}'s Books Issued</span></h4>
+          <!--table-->
+          <table class="table-fill container-fluid w-75 m-5 " >
+            <thead>
+            <tr>
+            <th class="text-left">Book Name</th>
+            <th class="text-left">Author</th>
+            <th class="text-left">Issue Date</th>
+            <th class="text-left">Return Date</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Return Book</th>
+            </tr>
+            </thead>
+            <tbody class="table-hover" id="myTableRow">
+                {% for order in student_order_list %}
+                <tr>
+                    <td>{{order.book_related.name}}</td>
+                    <td>{{order.book_related.author}}</td>
+                    <td>{{order.issue_date}}</td>
+                    <td >{{order.return_date}}</td>
+                    <td id="return_status{{order.id}}">
+                    {% if order.is_returned %}
+                        Returned
+                    {% else %} 
+                    Not Returned
+                    {% endif %}
+                        </td>
+                    <td><button type="button" class="btn btn-danger" value="{{order.id}}" onclick="fillReturnBookId(this)">SELECT</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+          <!--end Table-->  
+    </div>
+    
+</div>
+<script>
+    function issueBook()
+    {
+        user_id = document.getElementById('hidden_user_id').value;
+        book_id = document.getElementById('book_id').value;
+        year = document.getElementById('year').value;
+        month = document.getElementById('month').value;
+        day = document.getElementById('day').value;
+        hour = document.getElementById('hour').value;
+        minute= document.getElementById('minute').value;
+        table_rows = document.getElementById('myTableRow');
+        my_url = '/issueBook/' + user_id + '/' + book_id + '/'+ year + '/' + month + '/'  + day + '/' + hour + '/' + minute + '/';
+        //alert(my_url);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.responseText);
+            new_row = "<tr><td>" + data['book_name'] + "</td><td>" + data['book_author'] + "</td><td>" + data['issue_date'] + "</td><td>" + data['return_date'] + "</td><td id= 'return_status"+data['order_id'] +"'>Not Returned</td><td> <button type='button' class='btn btn-danger' value='"+ data['order_id']+" ' onclick='fillReturnBookId(this)'>SELECT</button>" ;
+            table_rows.innerHTML = new_row + table_rows.innerHTML;
+            //alert(data);
+            alert("Book Sucessfully Issued")
+            }
+        };
+  xhttp.open("GET", my_url, true);
+  xhttp.send();
+}
+
+
+    function fillReturnBookId(btn)
+    {
+        //alert(btn.value);
+        return_status_div = document.getElementById('return_status'+btn.value.trim());
+        my_url = '/returnBook/'+ btn.value.trim() + '/';
+        //alert(my_url);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                return_status_div.innerHTML = "Returned";
+                alert("Book Returned");
+            }
+        };
+  xhttp.open("GET", my_url, true);
+  xhttp.send();
+    }
+    function fillIssueBookId(value_id)
+    {
+        book_id_text = document.getElementById('book_id');
+        book_id_text.value = value_id;
+    }
+    function suggestBook()
+    {
+        book_id_text = document.getElementById('book_id').value;
+        my_url = '/bookSuggest/' + book_id_text + '/'
+        suggestion = document.getElementById('suggestion');
+        suggestion.innerHTML = "<ul>"
+        //alert(my_url);
+        //alert(book_id_text+' debug')
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(xhttp.responseText);
+            all_books = data['all_book'];
+            for(i=0; i < all_books.length;i++)
+            {
+                suggestion.innerHTML += "<li><a href='#' onclick= 'fillIssueBookId(" + all_books[i].id + ")'> " + all_books[i].name + " by "+ all_books[i].author + "</a></li>";
+            }
+            suggestion.innerHTML += '</ul>';
+            //alert(data);
+            }
+        };
+  xhttp.open("POST", my_url, true);
+  xhttp.send();
+
+    }
+</script>
+{% endblock librarian_body %}
+    

@@ -1,0 +1,80 @@
+{% extends "librarian_base.html" %}
+
+{% block librarian_body %}
+{% load static %}
+<link rel="stylesheet" href="{% static "table.css" %}">
+<!--Button for modal-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="float: right; margin-right:18px">
+    ADD BOOK
+  </button>
+<!--End Button-->
+<h1 class="text-center p-3"><span class="badge badge-danger">Book Section</span> </h1>
+
+<center>
+    <table class="table-fill  m-5 " >
+        <thead>
+        <tr>
+        <th class="text-left">Name</th>
+        <th class="text-left">Author</th>
+        </tr>
+        </thead>
+        <tbody class="table-hover" id="myTableRow">
+            {% for book in all_books %}
+            <tr>
+                <td>{{book.name}}</td>
+                <td>{{book.author}}</td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</center>
+<!--Modal Start-->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">ADD BOOK</h4>
+          <button type="button" class="close mt-2" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body" style="font-size: x-large;">
+            <form action="{% url 'main:book_section' %}" method="POST" enctype="multipart/form-data" >
+                {% csrf_token %}
+            <label for="file_type" class="col-md-4">Book Name</label><input type="text" name="name" class="col-md-6"><br>
+            <label for="title" class="col-md-4">Author</label><input type="text" name="author" class="col-md-6"><br>
+            <br>
+            <button  id="add" name="addBook" class="col-md-3 push-md-9 btn btn-success" class="btn btn-success">ADD</button>
+             </form>
+
+                
+                <!--
+        <div class="row">
+                
+           <div class="col-md-5">  <label for="addSong">File type</label> </div> <div class="col-md-7"> <input type="text" name="file_type" id="file_type"></div>
+        </div>
+        <div class="row">
+            <label for="title">Title</label> <input type="text" name="title" id="title"><br>
+        </div>
+            <label for="audio_file">Audio File</label><input type="file" name ="audio_file" id="audio_file" value="Audio File"><br>
+            <input type="submit" name="addSong"><br>
+            </form>
+        </div>
+  -->
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+<!--Add song-->
+
+</div>
+<!--Modal End-->
+{% endblock librarian_body %}
+    

@@ -1,0 +1,75 @@
+{% extends "admin_base.html" %}
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="{% static "table.css" %}">
+
+{% endblock style %}
+{% block admin_body %}
+
+<center>
+    <form action="/user_search/" method="POST">
+        {% csrf_token %}
+    <div class="row mb-2">
+        <div class="col-lg-4 offset-md-4 mt-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="text_val" placeholder="Enter username or user id" /> 
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+    
+    <div style="display: inline;">
+        <input type="checkbox" id = "is_admin" name="is_admin"> <label for="is_admin">Admin</label>
+        <input type="checkbox" id = "is_librarian" name="is_librarian"> <label for="is_admin">Librarian</label>
+    </div>
+</form>
+    <table class="table-fill  m-5 " >
+      <thead>
+      <tr>
+      <th class="text-left">Username</th>
+      <th class="text-left">Type</th>
+      <th class="text-left">DELETE</th>
+      </tr>
+      </thead>
+      <tbody class="table-hover" id="myTableRow">
+        
+    {% for curr_user in all_user %}
+        <tr id="deleteUser{{curr_user.id}}">
+              <td><a href="/profile/{{curr_user.id}}" class="text-primary">{{curr_user.username}}</a></td>
+              <td>
+              {% if curr_user.type_user.is_admin %}
+                  Admin,
+              {% endif %}  
+              {% if curr_user.type_user.is_librarian %}
+                  Librarian,
+              {% endif %}
+            
+            {% if curr_user.type_user.is_admin == False and curr_user.type_user.is_librarian  == False %}
+                None
+            {% endif %}
+                
+                  </td>
+            <TD><button class="btn btn-danger"  value="{{curr_user.id}}" onclick="return mydelete(this)">DELETE {{curr_user.username}}</button></TD>
+        </tr>
+    {% endfor %}
+        
+      </tbody>
+      </table>
+</center>
+<script>
+    function mydelete(button)
+    {
+        delete_div_id = button.value;
+        id_delete = 'deleteUser' + delete_div_id;
+        url = '/deleteUser/' + delete_div_id + '/';
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert("Sucessfully Deleted User")
+            document.getElementById(id_delete).remove();
+            }
+        };
+  xhttp.open("GET", url, true);
+  xhttp.send();
+    }
+</script>
+{% endblock admin_body %}
